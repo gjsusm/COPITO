@@ -15,11 +15,17 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -170,12 +176,21 @@ fun ProductDialog(
     var price by remember { mutableStateOf(product?.price?.toString() ?: "") }
     var description by remember { mutableStateOf(product?.description ?: "") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        imageUri = uri
-    }
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? -> imageUri = uri }
+    )
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted: Boolean ->
+            if (isGranted) {
+                imagePickerLauncher.launch("image/*")
+            }
+        }
+    )
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -195,7 +210,21 @@ fun ProductDialog(
                         modifier = Modifier.size(100.dp)
                     )
                 }
-                Button(onClick = { imagePickerLauncher.launch("image/*") }) {
+                Button(onClick = {
+                    val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    } else {
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    }
+                    when (PackageManager.PERMISSION_GRANTED) {
+                        ContextCompat.checkSelfPermission(context, permission) -> {
+                            imagePickerLauncher.launch("image/*")
+                        }
+                        else -> {
+                            permissionLauncher.launch(permission)
+                        }
+                    }
+                }) {
                     Text("Select Image")
                 }
                 Spacer(modifier = Modifier.height(8.dp))

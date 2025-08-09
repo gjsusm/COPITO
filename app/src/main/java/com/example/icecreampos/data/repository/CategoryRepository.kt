@@ -2,6 +2,7 @@ package com.example.icecreampos.data.repository
 
 import com.example.icecreampos.data.model.Category
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

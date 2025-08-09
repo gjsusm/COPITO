@@ -3,6 +3,7 @@ package com.example.icecreampos.data.repository
 import android.net.Uri
 import com.example.icecreampos.data.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow

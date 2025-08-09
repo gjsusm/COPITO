@@ -1,12 +1,5 @@
 package com.example.icecreampos.ui.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.icecreampos.data.model.Category
-import com.example.icecreampos.data.model.Product
-import com.example.icecreampos.data.repository.CategoryRepository
-import com.example.icecreampos.data.repository.ProductRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,11 +7,11 @@ import com.example.icecreampos.data.model.Category
 import com.example.icecreampos.data.model.Product
 import com.example.icecreampos.data.repository.CategoryRepository
 import com.example.icecreampos.data.repository.ProductRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+// Using the fully qualified name for the annotation to avoid ambiguity.
+@kotlinx.coroutines.ExperimentalCoroutinesApi
 class ProductViewModel : ViewModel() {
 
     private val productRepository = ProductRepository()

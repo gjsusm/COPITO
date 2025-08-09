@@ -33,7 +33,10 @@ fun AdminScreen(navController: NavController) {
             text = "Gestionar Categorías",
             onClick = { navController.navigate(Screen.ManageCategories.route) }
         )
-        AdminButton(text = "Gestionar Productos", onClick = { /* TODO */ })
+        AdminButton(
+            text = "Gestionar Productos",
+            onClick = { navController.navigate(Screen.ManageProducts.route) }
+        )
         AdminButton(text = "Gestionar Toppings", onClick = { /* TODO */ })
         AdminButton(text = "Gestionar Usuarios", onClick = { /* TODO */ })
 

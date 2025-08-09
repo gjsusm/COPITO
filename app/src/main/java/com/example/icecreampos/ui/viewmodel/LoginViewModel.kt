@@ -2,13 +2,17 @@ package com.example.icecreampos.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.icecreampos.data.model.User
+import com.example.icecreampos.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LoginViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val userRepository = UserRepository()
 
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
@@ -35,14 +39,19 @@ class LoginViewModel : ViewModel() {
                 return@launch
             }
             try {
-                auth.signInWithEmailAndPassword(_email.value.trim(), _password.value)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            _loginState.value = LoginState.Success
-                        } else {
-                            _loginState.value = LoginState.Error(task.exception?.message ?: "An unknown error occurred.")
-                        }
+                val authResult = auth.signInWithEmailAndPassword(_email.value.trim(), _password.value).await()
+                val firebaseUser = authResult.user
+                if (firebaseUser != null) {
+                    val user = userRepository.getUser(firebaseUser.uid)
+                    if (user != null) {
+                        _loginState.value = LoginState.Success(user)
+                    } else {
+                        _loginState.value = LoginState.Error("User data not found in Firestore.")
+                        auth.signOut() // Sign out if user data is missing
                     }
+                } else {
+                    _loginState.value = LoginState.Error("Authentication failed.")
+                }
             } catch (e: Exception) {
                 _loginState.value = LoginState.Error(e.message ?: "An unknown error occurred.")
             }
@@ -53,6 +62,6 @@ class LoginViewModel : ViewModel() {
 sealed class LoginState {
     object Idle : LoginState()
     object Loading : LoginState()
-    object Success : LoginState()
+    data class Success(val user: User) : LoginState()
     data class Error(val message: String) : LoginState()
 }

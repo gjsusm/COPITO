@@ -24,7 +24,9 @@ fun LoginScreen(
 
     LaunchedEffect(loginState) {
         if (loginState is LoginState.Success) {
-            navController.navigate(Screen.Home.route) {
+            val user = (loginState as LoginState.Success).user
+            val isAdmin = user.role == "admin"
+            navController.navigate(Screen.Home.route + "/$isAdmin") {
                 // Clear back stack
                 popUpTo(Screen.Login.route) { inclusive = true }
             }

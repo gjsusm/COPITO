@@ -14,15 +14,11 @@ data class OrderItem(
 }
 
 data class Cart(
-    val items: List<OrderItem> = emptyList(),
-    val taxRate: Double = 0.08 // Example tax rate (8%)
+    val items: List<OrderItem> = emptyList()
 ) {
     val subtotal: Double
         get() = items.sumOf { it.totalPrice }
 
-    val tax: Double
-        get() = subtotal * taxRate
-
     val total: Double
-        get() = subtotal + tax
+        get() = subtotal
 }

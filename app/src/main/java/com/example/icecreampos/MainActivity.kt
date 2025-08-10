@@ -16,6 +16,7 @@ import com.example.icecreampos.ui.navigation.Screen
 import com.example.icecreampos.ui.screens.AdminScreen
 import com.example.icecreampos.ui.screens.HomeScreen
 import com.example.icecreampos.ui.screens.LoginScreen
+import com.example.icecreampos.ui.screens.PaymentScreen
 import com.example.icecreampos.ui.screens.management.CategoryManagementScreen
 import com.example.icecreampos.ui.screens.management.ProductManagementScreen
 import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
@@ -53,6 +54,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.ManageToppings.route) {
                             ToppingManagementScreen(navController)
+                        }
+                        composable(Screen.Payment.route) {
+                            PaymentScreen(navController)
                         }
                     }
                 }

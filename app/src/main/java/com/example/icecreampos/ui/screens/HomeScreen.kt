@@ -235,10 +235,6 @@ fun SideCart(
                 Text("Subtotal:", style = MaterialTheme.typography.bodyLarge)
                 Text("$${"%.2f".format(cart.subtotal)}", style = MaterialTheme.typography.bodyLarge)
             }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Tax:", style = MaterialTheme.typography.bodyLarge)
-                Text("$${"%.2f".format(cart.tax)}", style = MaterialTheme.typography.bodyLarge)
-            }
             Spacer(modifier = Modifier.height(8.dp))
             Divider(thickness = 2.dp)
             Spacer(modifier = Modifier.height(8.dp))
@@ -248,7 +244,7 @@ fun SideCart(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { /*TODO: Navigate to Payment*/ },
+                onClick = { navController.navigate(Screen.Payment.route) },
                 modifier = Modifier.fillMaxWidth().height(60.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {

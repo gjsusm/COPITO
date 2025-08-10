@@ -72,12 +72,12 @@ fun ToppingManagementScreen(
             ToppingDialog(
                 topping = toppingToEdit,
                 onDismiss = { showDialog = false },
-                onConfirm = { name, price ->
+                onConfirm = { name ->
                     if (toppingToEdit == null) {
-                        toppingViewModel.addTopping(name, price)
+                        toppingViewModel.addTopping(name)
                     } else {
                         toppingViewModel.updateTopping(
-                            toppingToEdit!!.copy(name = name, price = price)
+                            toppingToEdit!!.copy(name = name)
                         )
                     }
                     showDialog = false
@@ -100,7 +100,7 @@ fun ToppingItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "${topping.name} - $${"%.2f".format(topping.price)}", modifier = Modifier.weight(1f))
+            Text(text = topping.name, modifier = Modifier.weight(1f))
             IconButton(onClick = onEditClick) { Icon(Icons.Default.Edit, "Edit") }
             IconButton(onClick = onDeleteClick) { Icon(Icons.Default.Delete, "Delete") }
         }
@@ -111,10 +111,9 @@ fun ToppingItem(
 fun ToppingDialog(
     topping: Topping?,
     onDismiss: () -> Unit,
-    onConfirm: (name: String, price: Double) -> Unit
+    onConfirm: (name: String) -> Unit
 ) {
     var name by remember { mutableStateOf(topping?.name ?: "") }
-    var price by remember { mutableStateOf(topping?.price?.toString() ?: "") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -122,18 +121,11 @@ fun ToppingDialog(
         text = {
             Column {
                 OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Topping Name") })
-                Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = price,
-                    onValueChange = { price = it },
-                    label = { Text("Price") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
             }
         },
         confirmButton = {
             Button(onClick = {
-                onConfirm(name, price.toDoubleOrNull() ?: 0.0)
+                onConfirm(name)
             }) { Text("Confirm") }
         },
         dismissButton = {

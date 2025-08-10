@@ -20,9 +20,9 @@ class ToppingViewModel : ViewModel() {
             initialValue = emptyList()
         )
 
-    fun addTopping(name: String, price: Double) {
+    fun addTopping(name: String) {
         viewModelScope.launch {
-            val newTopping = Topping(name = name, price = price, active = true)
+            val newTopping = Topping(name = name, active = true)
             repository.addTopping(newTopping)
         }
     }

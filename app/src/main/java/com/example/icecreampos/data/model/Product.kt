@@ -10,5 +10,6 @@ data class Product(
     val price: Double = 0.0,
     val description: String = "",
     val imageUrl: String = "",
-    val stock: Int? = null // Optional stock
+    val stock: Int? = null, // Optional stock
+    val includedToppings: Int = 0
 )

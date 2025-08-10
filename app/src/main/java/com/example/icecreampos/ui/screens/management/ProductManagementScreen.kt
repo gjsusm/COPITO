@@ -115,16 +115,18 @@ fun ProductManagementScreen(
             ProductDialog(
                 product = productToEdit,
                 onDismiss = { showDialog = false },
-                onConfirm = { name, price, description, imageUri ->
+                onConfirm = { name, price, description, includedToppings, imageUri ->
                     val productData = productToEdit?.copy(
                         name = name,
                         price = price,
-                        description = description
+                        description = description,
+                        includedToppings = includedToppings
                     ) ?: Product(
                         name = name,
                         price = price,
                         description = description,
-                        categoryId = selectedCategory!!
+                        categoryId = selectedCategory!!,
+                        includedToppings = includedToppings
                     )
 
                     if (productToEdit == null) {
@@ -170,11 +172,12 @@ fun ProductItem(
 fun ProductDialog(
     product: Product?,
     onDismiss: () -> Unit,
-    onConfirm: (name: String, price: Double, description: String, imageUri: Uri?) -> Unit
+    onConfirm: (name: String, price: Double, description: String, includedToppings: Int, imageUri: Uri?) -> Unit
 ) {
     var name by remember { mutableStateOf(product?.name ?: "") }
     var price by remember { mutableStateOf(product?.price?.toString() ?: "") }
     var description by remember { mutableStateOf(product?.description ?: "") }
+    var includedToppings by remember { mutableStateOf(product?.includedToppings?.toString() ?: "0") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
 
@@ -238,11 +241,24 @@ fun ProductDialog(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") })
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = includedToppings,
+                    onValueChange = { includedToppings = it.filter { char -> char.isDigit() } },
+                    label = { Text("Included Toppings") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
             }
         },
         confirmButton = {
             Button(onClick = {
-                onConfirm(name, price.toDoubleOrNull() ?: 0.0, description, imageUri)
+                onConfirm(
+                    name,
+                    price.toDoubleOrNull() ?: 0.0,
+                    description,
+                    includedToppings.toIntOrNull() ?: 0,
+                    imageUri
+                )
             }) { Text("Confirm") }
         },
         dismissButton = {

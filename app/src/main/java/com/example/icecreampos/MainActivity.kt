@@ -18,6 +18,7 @@ import com.example.icecreampos.ui.screens.HomeScreen
 import com.example.icecreampos.ui.screens.LoginScreen
 import com.example.icecreampos.ui.screens.management.CategoryManagementScreen
 import com.example.icecreampos.ui.screens.management.ProductManagementScreen
+import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,6 +50,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.ManageProducts.route) {
                             ProductManagementScreen(navController)
+                        }
+                        composable(Screen.ManageToppings.route) {
+                            ToppingManagementScreen(navController)
                         }
                     }
                 }

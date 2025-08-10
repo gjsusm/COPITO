@@ -1,11 +1,14 @@
 package com.example.icecreampos.data.model
 
+import java.util.UUID
+
 data class OrderItem(
+    val id: String = UUID.randomUUID().toString(),
     val product: Product,
     val quantity: Int = 1,
-    // Toppings will be added later
-    // val selectedToppings: List<Topping> = emptyList()
+    val selectedToppings: List<Topping> = emptyList()
 ) {
+    // Topping prices are not added, as per new requirements
     val totalPrice: Double
         get() = product.price * quantity
 }

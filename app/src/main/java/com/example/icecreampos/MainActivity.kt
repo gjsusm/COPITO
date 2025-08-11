@@ -20,6 +20,7 @@ import com.example.icecreampos.ui.screens.PaymentScreen
 import com.example.icecreampos.ui.screens.management.CategoryManagementScreen
 import com.example.icecreampos.ui.screens.management.ProductManagementScreen
 import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
+import com.example.icecreampos.ui.screens.management.UserManagementScreen
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
 
 class MainActivity : ComponentActivity() {
@@ -57,6 +58,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.Payment.route) {
                             PaymentScreen(navController)
+                        }
+                        composable(Screen.ManageUsers.route) {
+                            UserManagementScreen(navController)
                         }
                     }
                 }

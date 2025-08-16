@@ -4,17 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.icecreampos.data.model.User
 import com.example.icecreampos.data.repository.UserRepository
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+// This sealed class is no longer needed here, but other ViewModels might use it.
+// For now, we leave it, but in a larger refactor, it would move to a common file.
+sealed class UiState<out T> {
+    object Idle : UiState<Nothing>()
+    object Loading : UiState<Nothing>()
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
+}
+
 class UserViewModel : ViewModel() {
 
     private val repository = UserRepository()
-    private val functions = Firebase.functions
 
     val users: StateFlow<List<User>> = repository.getUsersStream()
         .stateIn(
@@ -23,32 +29,9 @@ class UserViewModel : ViewModel() {
             initialValue = emptyList()
         )
 
-    fun createUser(name: String, email: String, password: String, role: String) {
-        viewModelScope.launch {
-            val data = hashMapOf(
-                "name" to name,
-                "email" to email,
-                "password" to password,
-                "role" to role
-            )
-            try {
-                functions.getHttpsCallable("createNewUser").call(data).await()
-                // Optionally handle success, e.g., show a success message
-            } catch (e: Exception) {
-                // Optionally handle error, e.g., show an error message
-            }
-        }
-    }
-
     fun updateUser(user: User) {
         viewModelScope.launch {
             repository.updateUser(user)
-        }
-    }
-
-    fun deleteUser(userId: String) {
-        viewModelScope.launch {
-            repository.deleteUser(userId)
         }
     }
 }

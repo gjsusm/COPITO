@@ -19,6 +19,7 @@ import com.example.icecreampos.ui.screens.LoginScreen
 import com.example.icecreampos.ui.screens.PaymentScreen
 import com.example.icecreampos.ui.screens.management.CategoryManagementScreen
 import com.example.icecreampos.ui.screens.management.ProductManagementScreen
+import com.example.icecreampos.ui.screens.management.SettingsScreen
 import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
 import com.example.icecreampos.ui.screens.management.UserManagementScreen
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
@@ -61,6 +62,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.ManageUsers.route) {
                             UserManagementScreen(navController)
+                        }
+                        composable(Screen.Settings.route) {
+                            SettingsScreen(navController)
                         }
                     }
                 }

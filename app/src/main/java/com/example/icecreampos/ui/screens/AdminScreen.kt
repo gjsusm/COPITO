@@ -45,6 +45,10 @@ fun AdminScreen(navController: NavController) {
             text = "Gestionar Usuarios",
             onClick = { navController.navigate(Screen.ManageUsers.route) }
         )
+        AdminButton(
+            text = "Configuración de la Tienda",
+            onClick = { navController.navigate(Screen.Settings.route) }
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 

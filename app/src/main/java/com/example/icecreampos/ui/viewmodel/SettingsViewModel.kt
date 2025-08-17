@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SettingsViewModel : ViewModel() {
+import android.net.Uri
 
-    private val repository = SettingsRepository()
+class SettingsViewModel(private val repository: SettingsRepository) : ViewModel() {
 
     private val _settings = MutableStateFlow(Settings())
     val settings = _settings.asStateFlow()
@@ -48,6 +48,19 @@ class SettingsViewModel : ViewModel() {
                 _uiState.value = UiState.Success("Settings saved successfully!")
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.message ?: "Failed to save settings.")
+            }
+        }
+    }
+
+    fun uploadQrCode(uri: Uri) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val downloadUrl = repository.uploadYapeQrCode(uri)
+                repository.saveYapeQrCodeUrl(downloadUrl)
+                _uiState.value = UiState.Success("QR Code uploaded successfully")
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message ?: "An unknown error occurred")
             }
         }
     }

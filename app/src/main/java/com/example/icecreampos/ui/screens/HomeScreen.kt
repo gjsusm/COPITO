@@ -42,7 +42,7 @@ import com.example.icecreampos.ui.viewmodel.ToppingViewModel
 @Composable
 fun HomeScreen(
     navController: NavController,
-    isAdmin: Boolean,
+    userRole: String,
     categoryViewModel: CategoryViewModel = viewModel(),
     productViewModel: ProductViewModel = viewModel(),
     cartViewModel: CartViewModel,
@@ -81,7 +81,7 @@ fun HomeScreen(
                 .weight(0.65f)
                 .padding(start = 16.dp, top = 16.dp, end = 8.dp, bottom = 16.dp)
         ) {
-            PosTopBar(navController, isAdmin)
+            PosTopBar(navController, userRole == "admin")
             Spacer(modifier = Modifier.height(16.dp))
             CategorySelector(
                 categories = categories,
@@ -114,6 +114,8 @@ fun HomeScreen(
         ) {
             SideCart(
                 cart = cart,
+                navController = navController,
+                userRole = userRole,
                 onUpdateQuantity = { itemId, newQuantity ->
                     cartViewModel.updateQuantity(itemId, newQuantity)
                 },
@@ -203,6 +205,8 @@ fun ProductGrid(
 @Composable
 fun SideCart(
     cart: Cart,
+    navController: NavController,
+    userRole: String,
     onUpdateQuantity: (orderItemId: String, newQuantity: Int) -> Unit,
     onRemoveItem: (orderItemId: String) -> Unit
 ) {
@@ -246,7 +250,7 @@ fun SideCart(
             Button(
                 onClick = {
                     if (cart.items.isNotEmpty()) {
-                        navController.navigate(Screen.Payment.createRoute(cart.total.toFloat()))
+                        navController.navigate(Screen.Payment.createRoute(cart.total.toFloat(), userRole))
                     }
                 },
                 enabled = cart.items.isNotEmpty(),

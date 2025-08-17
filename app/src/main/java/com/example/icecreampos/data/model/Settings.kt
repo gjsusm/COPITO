@@ -5,5 +5,6 @@ data class Settings(
     val address: String = "",
     val ruc: String = "", // Tax ID
     val currency: String = "USD",
-    val taxPercent: Double = 0.0
+    val taxPercent: Double = 0.0,
+    val yapeQrCodeUrl: String? = null
 )

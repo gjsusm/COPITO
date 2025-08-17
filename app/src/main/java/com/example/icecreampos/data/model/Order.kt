@@ -29,6 +29,7 @@ data class Cart(
 data class Order(
     @DocumentId val id: String = "",
     val userId: String,
+    val customerId: String? = null,
     val items: List<OrderItem>,
     val subtotal: Double,
     val discount: Double = 0.0,

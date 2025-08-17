@@ -25,8 +25,7 @@ fun LoginScreen(
     LaunchedEffect(loginState) {
         if (loginState is LoginState.Success) {
             val user = (loginState as LoginState.Success).user
-            val isAdmin = user.role == "admin"
-            navController.navigate(Screen.Home.route + "/$isAdmin") {
+            navController.navigate(Screen.Home.route + "/${user.role}") {
                 // Clear back stack
                 popUpTo(Screen.Login.route) { inclusive = true }
             }
@@ -74,6 +73,20 @@ fun LoginScreen(
                 text = (loginState as LoginState.Error).message,
                 color = MaterialTheme.colorScheme.error
             )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Divider()
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text("Or", style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(
+            onClick = { navController.navigate("customer_dni") },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Continue as Customer")
         }
     }
 }

@@ -9,7 +9,7 @@ sealed class Screen(val route: String) {
     object ManageToppings : Screen("manage_toppings")
     object ManageUsers : Screen("manage_users")
     object Settings : Screen("settings")
-    object Payment : Screen("payment/{totalAmount}") {
-        fun createRoute(totalAmount: Float) = "payment/$totalAmount"
+    object Payment : Screen("payment/{totalAmount}/{userRole}") {
+        fun createRoute(totalAmount: Float, userRole: String) = "payment/$totalAmount/$userRole"
     }
 }

@@ -11,24 +11,34 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class PaymentViewModel : ViewModel() {
+import com.example.icecreampos.data.repository.CustomerRepository
 
-    private val repository = OrderRepository()
+class PaymentViewModel(
+    private val orderRepository: OrderRepository,
+    private val customerRepository: CustomerRepository
+) : ViewModel() {
 
     private val _paymentState = MutableStateFlow<UiState<String>>(UiState.Idle)
     val paymentState = _paymentState.asStateFlow()
 
-    fun processPayment(cart: Cart, paymentMethod: String) {
+    fun processPayment(cart: Cart, paymentMethod: String, customerDni: String? = null) {
         viewModelScope.launch {
             _paymentState.value = UiState.Loading
             val currentUser = Firebase.auth.currentUser
-            if (currentUser == null) {
+            if (currentUser == null && customerDni == null) {
                 _paymentState.value = UiState.Error("User not authenticated.")
                 return@launch
             }
 
+            val customer = if (customerDni != null) {
+                customerRepository.findOrCreateCustomerByDni(customerDni)
+            } else {
+                null
+            }
+
             val order = Order(
-                userId = currentUser.uid,
+                userId = currentUser?.uid ?: "",
+                customerId = customer?.id,
                 items = cart.items,
                 subtotal = cart.subtotal,
                 total = cart.total,
@@ -36,7 +46,11 @@ class PaymentViewModel : ViewModel() {
             )
 
             try {
-                repository.saveOrder(order)
+                orderRepository.saveOrder(order)
+                if (customer != null) {
+                    val points = cart.total.toInt()
+                    customerRepository.addPointsToCustomer(customer.id, points)
+                }
                 _paymentState.value = UiState.Success("Sale completed successfully!")
             } catch (e: Exception) {
                 _paymentState.value = UiState.Error(e.message ?: "Failed to save order.")

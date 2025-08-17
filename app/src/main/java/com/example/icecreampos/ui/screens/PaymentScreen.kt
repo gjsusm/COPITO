@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.foundation.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import com.example.icecreampos.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +29,7 @@ import com.example.icecreampos.ui.viewmodel.UiState
 fun PaymentScreen(
     navController: NavController,
     totalAmount: Float,
+    userRole: String,
     cartViewModel: CartViewModel,
     paymentViewModel: PaymentViewModel = viewModel()
 ) {
@@ -43,8 +47,8 @@ fun PaymentScreen(
                 Toast.makeText(context, state.data, Toast.LENGTH_LONG).show()
                 cartViewModel.clearCart()
                 paymentViewModel.resetPaymentState()
-                navController.navigate(Screen.Home.route + "/true") { // Assuming admin, adjust as needed
-                    popUpTo(Screen.Home.route + "/true") { inclusive = true }
+                navController.navigate(Screen.Home.route + "/$userRole") {
+                    popUpTo(Screen.Home.route + "/$userRole") { inclusive = true }
                 }
             }
             is UiState.Error -> {
@@ -87,8 +91,7 @@ fun PaymentScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PaymentMethodButton("Cash", selectedPaymentMethod) { selectedPaymentMethod = "Cash" }
-                PaymentMethodButton("Card", selectedPaymentMethod) { selectedPaymentMethod = "Card" }
-                PaymentMethodButton("Other", selectedPaymentMethod) { selectedPaymentMethod = "Other" }
+                PaymentMethodButton("Yape", selectedPaymentMethod) { selectedPaymentMethod = "Yape" }
             }
 
             if (selectedPaymentMethod == "Cash") {
@@ -109,12 +112,34 @@ fun PaymentScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.secondary
                 )
+            } else if (selectedPaymentMethod == "Yape") {
+                Spacer(modifier = Modifier.height(24.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.yape_qr_code),
+                    contentDescription = "Yape QR Code",
+                    modifier = Modifier.size(256.dp)
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
+            var customerDni by remember { mutableStateOf("") }
+            if (userRole == "employee" || userRole == "admin") {
+                Spacer(modifier = Modifier.height(24.dp))
+                OutlinedTextField(
+                    value = customerDni,
+                    onValueChange = { customerDni = it },
+                    label = { Text("Customer DNI (Optional)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+            }
+
             Button(
-                onClick = { paymentViewModel.processPayment(cart, selectedPaymentMethod) },
+                onClick = {
+                    val dni = if (customerDni.isNotBlank()) customerDni else null
+                    paymentViewModel.processPayment(cart, selectedPaymentMethod, dni)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp),

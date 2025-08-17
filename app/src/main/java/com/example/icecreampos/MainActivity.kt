@@ -3,80 +3,72 @@ package com.example.icecreampos
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
+import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.icecreampos.ui.navigation.Screen
-import com.example.icecreampos.ui.screens.AdminScreen
-import com.example.icecreampos.ui.screens.HomeScreen
-import com.example.icecreampos.ui.screens.LoginScreen
-import com.example.icecreampos.ui.screens.PaymentScreen
-import com.example.icecreampos.ui.screens.management.CategoryManagementScreen
-import com.example.icecreampos.ui.screens.management.ProductManagementScreen
-import com.example.icecreampos.ui.screens.management.SettingsScreen
-import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
-import com.example.icecreampos.ui.screens.management.UserManagementScreen
+import com.example.icecreampos.ui.screens.*
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
-import com.example.icecreampos.ui.viewmodel.CartViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             IceCreamPOSTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val navController = rememberNavController()
-                    val cartViewModel: CartViewModel = viewModel()
-
-                    NavHost(navController = navController, startDestination = Screen.Login.route) {
-                        composable(Screen.Login.route) {
-                            LoginScreen(navController)
-                        }
-                        composable(
-                            route = Screen.Home.route + "/{isAdmin}",
-                            arguments = listOf(navArgument("isAdmin") { type = NavType.BoolType })
-                        ) { backStackEntry ->
-                            val isAdmin = backStackEntry.arguments?.getBoolean("isAdmin") ?: false
-                            HomeScreen(navController, isAdmin, cartViewModel = cartViewModel)
-                        }
-                        composable(Screen.Admin.route) {
-                            AdminScreen(navController)
-                        }
-                        composable(Screen.ManageCategories.route) {
-                            CategoryManagementScreen(navController)
-                        }
-                        composable(Screen.ManageProducts.route) {
-                            ProductManagementScreen(navController)
-                        }
-                        composable(Screen.ManageToppings.route) {
-                            ToppingManagementScreen(navController)
-                        }
-                        composable(Screen.ManageUsers.route) {
-                            UserManagementScreen(navController)
-                        }
-                        composable(Screen.Settings.route) {
-                            SettingsScreen(navController)
-                        }
-                        composable(
-                            route = "payment/{totalAmount}",
-                            arguments = listOf(navArgument("totalAmount") { type = NavType.FloatType })
-                        ) { backStackEntry ->
-                            val totalAmount = backStackEntry.arguments?.getFloat("totalAmount") ?: 0f
-                            PaymentScreen(navController, totalAmount, cartViewModel = cartViewModel)
-                        }
-                    }
-                }
+                AppNavigator()
             }
+        }
+    }
+}
+
+@Composable
+fun AppNavigator() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = Screen.Login.route) {
+        composable(Screen.Login.route) {
+            LoginScreen(navController = navController, viewModel = koinViewModel())
+        }
+        composable(Screen.Home.route + "/{userRole}") { backStackEntry ->
+            val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"
+            HomeScreen(
+                navController = navController,
+                userRole = userRole,
+                cartViewModel = koinViewModel()
+            )
+        }
+        composable(Screen.Admin.route) {
+            AdminPanelScreen(navController = navController)
+        }
+        composable(Screen.ManageCategories.route) {
+            CategoryManagementScreen(viewModel = koinViewModel())
+        }
+        composable(Screen.ManageProducts.route) {
+            ProductManagementScreen(viewModel = koinViewModel())
+        }
+        composable(Screen.ManageToppings.route) {
+            ToppingManagementScreen(viewModel = koinViewModel())
+        }
+        composable(Screen.ManageUsers.route) {
+            UserManagementScreen(viewModel = koinViewModel())
+        }
+        composable(Screen.Payment.route) { backStackEntry ->
+            val total = backStackEntry.arguments?.getString("totalAmount")?.toFloat() ?: 0.0f
+            val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"
+            PaymentScreen(
+                navController = navController,
+                totalAmount = total,
+                userRole = userRole,
+                cartViewModel = koinViewModel(),
+                paymentViewModel = koinViewModel()
+            )
+        }
+        composable("customer_dni") {
+            CustomerDNIScreen(navController = navController)
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen(navController = navController)
         }
     }
 }

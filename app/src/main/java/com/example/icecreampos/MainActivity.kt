@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,6 +24,7 @@ import com.example.icecreampos.ui.screens.management.SettingsScreen
 import com.example.icecreampos.ui.screens.management.ToppingManagementScreen
 import com.example.icecreampos.ui.screens.management.UserManagementScreen
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
+import com.example.icecreampos.ui.viewmodel.CartViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+                    val cartViewModel: CartViewModel = viewModel()
+
                     NavHost(navController = navController, startDestination = Screen.Login.route) {
                         composable(Screen.Login.route) {
                             LoginScreen(navController)
@@ -43,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("isAdmin") { type = NavType.BoolType })
                         ) { backStackEntry ->
                             val isAdmin = backStackEntry.arguments?.getBoolean("isAdmin") ?: false
-                            HomeScreen(navController, isAdmin)
+                            HomeScreen(navController, isAdmin, cartViewModel = cartViewModel)
                         }
                         composable(Screen.Admin.route) {
                             AdminScreen(navController)
@@ -57,14 +61,18 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.ManageToppings.route) {
                             ToppingManagementScreen(navController)
                         }
-                        composable(Screen.Payment.route) {
-                            PaymentScreen(navController)
-                        }
                         composable(Screen.ManageUsers.route) {
                             UserManagementScreen(navController)
                         }
                         composable(Screen.Settings.route) {
                             SettingsScreen(navController)
+                        }
+                        composable(
+                            route = "payment/{totalAmount}",
+                            arguments = listOf(navArgument("totalAmount") { type = NavType.FloatType })
+                        ) { backStackEntry ->
+                            val totalAmount = backStackEntry.arguments?.getFloat("totalAmount") ?: 0f
+                            PaymentScreen(navController, totalAmount, cartViewModel = cartViewModel)
                         }
                     }
                 }

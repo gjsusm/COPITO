@@ -45,7 +45,7 @@ fun HomeScreen(
     isAdmin: Boolean,
     categoryViewModel: CategoryViewModel = viewModel(),
     productViewModel: ProductViewModel = viewModel(),
-    cartViewModel: CartViewModel = viewModel(),
+    cartViewModel: CartViewModel,
     toppingViewModel: ToppingViewModel = viewModel()
 ) {
     val categories by categoryViewModel.categories.collectAsState()
@@ -244,7 +244,12 @@ fun SideCart(
             }
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { navController.navigate(Screen.Payment.route) },
+                onClick = {
+                    if (cart.items.isNotEmpty()) {
+                        navController.navigate(Screen.Payment.createRoute(cart.total.toFloat()))
+                    }
+                },
+                enabled = cart.items.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth().height(60.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {

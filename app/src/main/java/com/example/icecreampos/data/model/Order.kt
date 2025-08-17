@@ -1,5 +1,8 @@
 package com.example.icecreampos.data.model
 
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.Date
 import java.util.UUID
 
 data class OrderItem(
@@ -22,3 +25,15 @@ data class Cart(
     val total: Double
         get() = subtotal
 }
+
+data class Order(
+    @DocumentId val id: String = "",
+    val userId: String,
+    val items: List<OrderItem>,
+    val subtotal: Double,
+    val discount: Double = 0.0,
+    val total: Double,
+    val paymentMethod: String,
+    val status: String = "Completed",
+    @ServerTimestamp val createdAt: Date? = null
+)

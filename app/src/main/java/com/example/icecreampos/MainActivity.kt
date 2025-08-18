@@ -11,6 +11,7 @@ import com.example.icecreampos.ui.navigation.Screen
 import com.example.icecreampos.ui.screens.*
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

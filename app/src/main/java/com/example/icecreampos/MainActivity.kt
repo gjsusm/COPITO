@@ -39,7 +39,7 @@ fun AppNavigator() {
             )
         }
         composable(Screen.Admin.route) {
-            AdminPanelScreen(navController = navController)
+            AdminScreen(navController = navController)
         }
         composable(Screen.ManageCategories.route) {
             CategoryManagementScreen(viewModel = koinViewModel())

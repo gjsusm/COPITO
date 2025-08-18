@@ -30,7 +30,6 @@ fun AppNavigator() {
         composable(Screen.Login.route) {
             LoginScreen(navController = navController)
         }
-import org.koin.androidx.compose.koinViewModel
 
         composable(Screen.Home.route + "/{userRole}") { backStackEntry ->
             val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"

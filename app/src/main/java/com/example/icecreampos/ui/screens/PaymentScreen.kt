@@ -24,15 +24,17 @@ import com.example.icecreampos.ui.viewmodel.CartViewModel
 import com.example.icecreampos.ui.viewmodel.PaymentViewModel
 import com.example.icecreampos.ui.viewmodel.UiState
 
+import org.koin.androidx.compose.koinViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
     navController: NavController,
     totalAmount: Float,
-    userRole: String,
-    cartViewModel: CartViewModel
+    userRole: String
 ) {
-    val paymentViewModel: PaymentViewModel = viewModel()
+    val cartViewModel: CartViewModel = koinViewModel()
+    val paymentViewModel: PaymentViewModel = koinViewModel()
     val cart by cartViewModel.cart.collectAsState()
     val paymentState by paymentViewModel.paymentState.collectAsState()
     val context = LocalContext.current

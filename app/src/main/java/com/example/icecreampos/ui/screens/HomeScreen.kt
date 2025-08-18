@@ -42,12 +42,12 @@ import com.example.icecreampos.ui.viewmodel.ToppingViewModel
 @Composable
 fun HomeScreen(
     navController: NavController,
-    userRole: String,
-    categoryViewModel: CategoryViewModel = viewModel(),
-    productViewModel: ProductViewModel = viewModel(),
-    cartViewModel: CartViewModel,
-    toppingViewModel: ToppingViewModel = viewModel()
+    userRole: String
 ) {
+    val categoryViewModel: CategoryViewModel = koinViewModel()
+    val productViewModel: ProductViewModel = koinViewModel()
+    val cartViewModel: CartViewModel = koinViewModel()
+    val toppingViewModel: ToppingViewModel = koinViewModel()
     val categories by categoryViewModel.categories.collectAsState()
     val products by productViewModel.products.collectAsState()
     val cart by cartViewModel.cart.collectAsState()

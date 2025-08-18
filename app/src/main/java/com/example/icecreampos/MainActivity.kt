@@ -11,7 +11,6 @@ import com.example.icecreampos.ui.navigation.Screen
 import com.example.icecreampos.ui.screens.*
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
 import org.koin.androidx.compose.koinViewModel
-import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,7 @@ fun AppNavigator() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.Login.route) {
         composable(Screen.Login.route) {
-            LoginScreen(navController = navController, viewModel = koinViewModel())
+            LoginScreen(navController = navController)
         }
         composable(Screen.Home.route + "/{userRole}") { backStackEntry ->
             val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"

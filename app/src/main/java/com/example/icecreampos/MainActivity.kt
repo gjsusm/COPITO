@@ -35,23 +35,23 @@ fun AppNavigator() {
             HomeScreen(
                 navController = navController,
                 userRole = userRole,
-                cartViewModel = koinViewModel()
+                cartViewModel = koinViewModel(),
             )
         }
         composable(Screen.Admin.route) {
             AdminScreen(navController = navController)
         }
         composable(Screen.ManageCategories.route) {
-            CategoryManagementScreen(viewModel = koinViewModel())
+            CategoryManagementScreen(navController = navController)
         }
         composable(Screen.ManageProducts.route) {
-            ProductManagementScreen(viewModel = koinViewModel())
+            ProductManagementScreen(navController = navController)
         }
         composable(Screen.ManageToppings.route) {
-            ToppingManagementScreen(viewModel = koinViewModel())
+            ToppingManagementScreen(navController = navController)
         }
         composable(Screen.ManageUsers.route) {
-            UserManagementScreen(viewModel = koinViewModel())
+            UserManagementScreen(navController = navController)
         }
         composable(Screen.Payment.route) { backStackEntry ->
             val total = backStackEntry.arguments?.getString("totalAmount")?.toFloat() ?: 0.0f

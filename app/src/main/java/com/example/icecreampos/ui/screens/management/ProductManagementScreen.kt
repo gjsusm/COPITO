@@ -35,9 +35,9 @@ import com.example.icecreampos.ui.viewmodel.ProductViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductManagementScreen(
-    navController: NavController,
-    productViewModel: ProductViewModel = viewModel()
+    navController: NavController
 ) {
+    val productViewModel: ProductViewModel = viewModel()
     val categories by productViewModel.categories.collectAsState()
     val products by productViewModel.products.collectAsState()
     var selectedCategory by remember { mutableStateOf<String?>(null) }

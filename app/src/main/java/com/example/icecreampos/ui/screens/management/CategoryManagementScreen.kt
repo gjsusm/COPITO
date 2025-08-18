@@ -23,9 +23,9 @@ import com.example.icecreampos.ui.viewmodel.CategoryViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryManagementScreen(
-    navController: NavController,
-    categoryViewModel: CategoryViewModel = viewModel()
+    navController: NavController
 ) {
+    val categoryViewModel: CategoryViewModel = viewModel()
     val categories by categoryViewModel.categories.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var categoryToEdit by remember { mutableStateOf<Category?>(null) }

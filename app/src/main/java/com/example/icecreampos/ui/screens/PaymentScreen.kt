@@ -30,9 +30,9 @@ fun PaymentScreen(
     navController: NavController,
     totalAmount: Float,
     userRole: String,
-    cartViewModel: CartViewModel,
-    paymentViewModel: PaymentViewModel = viewModel()
+    cartViewModel: CartViewModel
 ) {
+    val paymentViewModel: PaymentViewModel = viewModel()
     val cart by cartViewModel.cart.collectAsState()
     val paymentState by paymentViewModel.paymentState.collectAsState()
     val context = LocalContext.current

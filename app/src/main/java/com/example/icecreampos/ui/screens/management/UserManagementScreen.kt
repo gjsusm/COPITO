@@ -20,9 +20,9 @@ import com.example.icecreampos.ui.viewmodel.UserViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserManagementScreen(
-    navController: NavController,
-    userViewModel: UserViewModel = viewModel()
+    navController: NavController
 ) {
+    val userViewModel: UserViewModel = viewModel()
     val users by userViewModel.users.collectAsState()
     var showEditDialog by remember { mutableStateOf(false) }
     var userToEdit by remember { mutableStateOf<User?>(null) }

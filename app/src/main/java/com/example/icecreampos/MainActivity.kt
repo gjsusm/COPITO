@@ -32,10 +32,8 @@ fun AppNavigator() {
         }
 
         composable(Screen.Home.route + "/{userRole}") { backStackEntry ->
-            val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"
             HomeScreen(
-                navController = navController,
-                userRole = userRole
+                navController = navController
             )
         }
         composable(Screen.Admin.route) {

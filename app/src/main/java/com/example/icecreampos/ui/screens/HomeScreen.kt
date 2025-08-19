@@ -39,11 +39,15 @@ import com.example.icecreampos.ui.viewmodel.CategoryViewModel
 import com.example.icecreampos.ui.viewmodel.ProductViewModel
 import com.example.icecreampos.ui.viewmodel.ToppingViewModel
 
+import com.example.icecreampos.ui.viewmodel.LoginViewModel
+import org.koin.androidx.compose.koinViewModel
+
 @Composable
 fun HomeScreen(
-    navController: NavController,
-    userRole: String
+    navController: NavController
 ) {
+    val loginViewModel: LoginViewModel = koinViewModel()
+    val userRole by loginViewModel.loginState.collectAsState()
     val categoryViewModel: CategoryViewModel = koinViewModel()
     val productViewModel: ProductViewModel = koinViewModel()
     val cartViewModel: CartViewModel = koinViewModel()
@@ -81,7 +85,7 @@ fun HomeScreen(
                 .weight(0.65f)
                 .padding(start = 16.dp, top = 16.dp, end = 8.dp, bottom = 16.dp)
         ) {
-            PosTopBar(navController, userRole == "admin")
+            PosTopBar(navController, (userRole as? LoginViewModel.LoginUiState.Success)?.role == "admin")
             Spacer(modifier = Modifier.height(16.dp))
             CategorySelector(
                 categories = categories,
@@ -115,7 +119,7 @@ fun HomeScreen(
             SideCart(
                 cart = cart,
                 navController = navController,
-                userRole = userRole,
+                userRole = (userRole as? LoginViewModel.LoginUiState.Success)?.role ?: "employee",
                 onUpdateQuantity = { itemId, newQuantity ->
                     cartViewModel.updateQuantity(itemId, newQuantity)
                 },

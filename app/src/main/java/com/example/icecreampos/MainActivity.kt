@@ -53,11 +53,9 @@ fun AppNavigator() {
         }
         composable(Screen.Payment.route) { backStackEntry ->
             val total = backStackEntry.arguments?.getString("totalAmount")?.toFloat() ?: 0.0f
-            val userRole = backStackEntry.arguments?.getString("userRole") ?: "employee"
             PaymentScreen(
                 navController = navController,
-                totalAmount = total,
-                userRole = userRole
+                totalAmount = total
             )
         }
         composable("customer_dni") {

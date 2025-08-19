@@ -22,10 +22,12 @@ fun LoginScreen(
     val password by loginViewModel.password.collectAsState()
     val loginState by loginViewModel.loginState.collectAsState()
 
+    val userRoleViewModel: UserRoleViewModel = koinViewModel()
     LaunchedEffect(loginState) {
         if (loginState is LoginState.Success) {
             val user = (loginState as LoginState.Success).user
-            navController.navigate(Screen.Home.route + "/${user.role}") {
+            userRoleViewModel.setUserRole(user.role)
+            navController.navigate(Screen.Home.route) {
                 // Clear back stack
                 popUpTo(Screen.Login.route) { inclusive = true }
             }

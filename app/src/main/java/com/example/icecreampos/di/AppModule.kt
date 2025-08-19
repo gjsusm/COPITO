@@ -32,4 +32,5 @@ val appModule = module {
     viewModel { PaymentViewModel(get(), get()) }
     viewModel { CustomerDNIViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
+    viewModel { UserRoleViewModel() }
 }

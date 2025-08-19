@@ -28,14 +28,16 @@ import org.koin.androidx.compose.koinViewModel
 
 import com.example.icecreampos.ui.viewmodel.LoginViewModel
 
+import com.example.icecreampos.ui.viewmodel.UserRoleViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
     navController: NavController,
     totalAmount: Float
 ) {
-    val loginViewModel: LoginViewModel = koinViewModel()
-    val userRole by loginViewModel.loginState.collectAsState()
+    val userRoleViewModel: UserRoleViewModel = koinViewModel()
+    val userRole by userRoleViewModel.userRole.collectAsState()
     val cartViewModel: CartViewModel = koinViewModel()
     val paymentViewModel: PaymentViewModel = koinViewModel()
     val cart by cartViewModel.cart.collectAsState()
@@ -52,8 +54,8 @@ fun PaymentScreen(
                 Toast.makeText(context, state.data, Toast.LENGTH_LONG).show()
                 cartViewModel.clearCart()
                 paymentViewModel.resetPaymentState()
-                navController.navigate(Screen.Home.route + "/${(userRole as? LoginViewModel.LoginUiState.Success)?.role ?: "employee"}") {
-                    popUpTo(Screen.Home.route + "/${(userRole as? LoginViewModel.LoginUiState.Success)?.role ?: "employee"}") { inclusive = true }
+                navController.navigate(Screen.Home.route) {
+                    popUpTo(Screen.Home.route) { inclusive = true }
                 }
             }
             is UiState.Error -> {
@@ -129,7 +131,7 @@ fun PaymentScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             var customerDni by remember { mutableStateOf("") }
-            if ((userRole as? LoginViewModel.LoginUiState.Success)?.role == "employee" || (userRole as? LoginViewModel.LoginUiState.Success)?.role == "admin") {
+            if (userRole == "employee" || userRole == "admin") {
                 Spacer(modifier = Modifier.height(24.dp))
                 OutlinedTextField(
                     value = customerDni,

@@ -13,14 +13,14 @@ val appModule = module {
     single { FirebaseFirestore.getInstance() }
     single { FirebaseStorage.getInstance() }
 
-    single { AuthRepository(get()) }
-    single { UserRepository(get()) }
-    single { CategoryRepository(get()) }
-    single { ProductRepository(get(), get()) }
-    single { ToppingRepository(get()) }
-    single { OrderRepository(get()) }
-    single { CustomerRepository(get()) }
-    single { SettingsRepository(get(), get()) }
+    single { AuthRepository(get<FirebaseAuth>()) }
+    single { UserRepository(get<FirebaseFirestore>()) }
+    single { CategoryRepository(get<FirebaseFirestore>()) }
+    single { ProductRepository(get<FirebaseFirestore>(), get<FirebaseStorage>()) }
+    single { ToppingRepository(get<FirebaseFirestore>()) }
+    single { OrderRepository(get<FirebaseFirestore>()) }
+    single { CustomerRepository(get<FirebaseFirestore>()) }
+    single { SettingsRepository(get<FirebaseFirestore>(), get<FirebaseStorage>()) }
     single { SessionManager() }
 
 

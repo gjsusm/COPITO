@@ -26,13 +26,13 @@ val appModule = module {
 
 
     viewModel { LoginViewModel(get(), get(), get()) }
-    viewModel { UserViewModel(get()) }
-    viewModel { CategoryViewModel(get()) }
-    viewModel { ProductViewModel(get(), get()) }
-    viewModel { ToppingViewModel(get()) }
+    viewModel { UserViewModel(get<UserRepository>()) }
+    viewModel { CategoryViewModel(get<CategoryRepository>()) }
+    viewModel { ProductViewModel(get<ProductRepository>(), get<FirebaseStorage>()) }
+    viewModel { ToppingViewModel(get<ToppingRepository>()) }
     viewModel { CartViewModel() }
-    viewModel { PaymentViewModel(get(), get()) }
-    viewModel { CustomerDNIViewModel(get()) }
-    viewModel { SettingsViewModel(get()) }
+    viewModel { PaymentViewModel(get<OrderRepository>(), get<CustomerRepository>()) }
+    viewModel { CustomerDNIViewModel(get<CustomerRepository>()) }
+    viewModel { SettingsViewModel(get<SettingsRepository>()) }
     viewModel { UserRoleViewModel() }
 }

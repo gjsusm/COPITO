@@ -1,5 +1,6 @@
 package com.example.icecreampos.di
 
+import com.example.icecreampos.data.SessionManager
 import com.example.icecreampos.data.repository.*
 import com.example.icecreampos.ui.viewmodel.*
 import com.google.firebase.auth.FirebaseAuth

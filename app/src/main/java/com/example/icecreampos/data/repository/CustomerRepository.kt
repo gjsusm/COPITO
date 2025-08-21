@@ -14,11 +14,11 @@ class CustomerRepository(private val firestore: FirebaseFirestore) {
         val querySnapshot = customersCollection.whereEqualTo("dni", dni).get().await()
         if (querySnapshot.isEmpty) {
             val newCustomer = Customer(dni = dni)
-            val docRef = customersCollection.add(newCustomer).await()
-            return newCustomer.copy(id = docRef.id)
+            customersCollection.document(dni).set(newCustomer).await()
+            return newCustomer
         } else {
             val document = querySnapshot.documents.first()
-            return document.toObject(Customer::class.java)!!.copy(id = document.id)
+            return document.toObject(Customer::class.java)!!
         }
     }
 

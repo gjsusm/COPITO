@@ -18,9 +18,7 @@ sealed class UiState<out T> {
     data class Error(val message: String) : UiState<Nothing>()
 }
 
-class UserViewModel : ViewModel() {
-
-    private val repository = UserRepository()
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
     val users: StateFlow<List<User>> = repository.getUsersStream()
         .stateIn(

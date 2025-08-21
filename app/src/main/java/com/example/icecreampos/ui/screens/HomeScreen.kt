@@ -42,14 +42,15 @@ import com.example.icecreampos.ui.viewmodel.ToppingViewModel
 import com.example.icecreampos.ui.viewmodel.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
 
-import com.example.icecreampos.ui.viewmodel.UserRoleViewModel
+import com.example.icecreampos.data.SessionManager
+import org.koin.androidx.compose.get
 
 @Composable
 fun HomeScreen(
     navController: NavController
 ) {
-    val userRoleViewModel: UserRoleViewModel = koinViewModel()
-    val userRole by userRoleViewModel.userRole.collectAsState()
+    val sessionManager: SessionManager = get()
+    val userRole = sessionManager.currentUser?.role
     val categoryViewModel: CategoryViewModel = koinViewModel()
     val productViewModel: ProductViewModel = koinViewModel()
     val cartViewModel: CartViewModel = koinViewModel()
@@ -121,7 +122,7 @@ fun HomeScreen(
             SideCart(
                 cart = cart,
                 navController = navController,
-                userRole = userRole,
+                userRole = userRole ?: "employee",
                 onUpdateQuantity = { itemId, newQuantity ->
                     cartViewModel.updateQuantity(itemId, newQuantity)
                 },

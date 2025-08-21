@@ -28,7 +28,8 @@ import org.koin.androidx.compose.koinViewModel
 
 import com.example.icecreampos.ui.viewmodel.LoginViewModel
 
-import com.example.icecreampos.ui.viewmodel.UserRoleViewModel
+import com.example.icecreampos.data.SessionManager
+import org.koin.androidx.compose.get
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,8 +37,8 @@ fun PaymentScreen(
     navController: NavController,
     totalAmount: Float
 ) {
-    val userRoleViewModel: UserRoleViewModel = koinViewModel()
-    val userRole by userRoleViewModel.userRole.collectAsState()
+    val sessionManager: SessionManager = get()
+    val userRole = sessionManager.currentUser?.role
     val cartViewModel: CartViewModel = koinViewModel()
     val paymentViewModel: PaymentViewModel = koinViewModel()
     val cart by cartViewModel.cart.collectAsState()

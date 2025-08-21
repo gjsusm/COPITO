@@ -21,9 +21,10 @@ val appModule = module {
     single { OrderRepository(get()) }
     single { CustomerRepository(get()) }
     single { SettingsRepository(get(), get()) }
+    single { SessionManager() }
 
 
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { UserViewModel(get()) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProductViewModel(get(), get()) }

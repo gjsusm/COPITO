@@ -4,8 +4,7 @@ import com.example.icecreampos.data.model.Order
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class OrderRepository {
-    private val db = FirebaseFirestore.getInstance()
+class OrderRepository(private val db: FirebaseFirestore) {
     private val ordersCollection = db.collection("orders")
 
     suspend fun saveOrder(order: Order) {

@@ -10,9 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
-class ProductRepository {
-    private val db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
+class ProductRepository(private val db: FirebaseFirestore, private val storage: FirebaseStorage) {
     private val productsCollection = db.collection("products")
 
     // Get a real-time stream of products for a specific category

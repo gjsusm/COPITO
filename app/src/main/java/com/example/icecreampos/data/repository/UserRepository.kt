@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
-class UserRepository {
-    private val db = FirebaseFirestore.getInstance()
+class UserRepository(private val db: FirebaseFirestore) {
     private val usersCollection = db.collection("users")
 
     suspend fun getUser(uid: String): User? {

@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
-class ToppingRepository {
-    private val db = FirebaseFirestore.getInstance()
+class ToppingRepository(private val db: FirebaseFirestore) {
     private val toppingsCollection = db.collection("toppings")
 
     fun getToppingsStream(): Flow<List<Topping>> {

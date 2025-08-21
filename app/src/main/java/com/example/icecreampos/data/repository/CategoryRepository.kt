@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
-class CategoryRepository {
-    private val db = FirebaseFirestore.getInstance()
+class CategoryRepository(private val db: FirebaseFirestore) {
     private val categoriesCollection = db.collection("categories")
 
     fun getCategoriesStream(): Flow<List<Category>> {

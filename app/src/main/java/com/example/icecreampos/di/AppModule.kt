@@ -25,7 +25,7 @@ val appModule = module {
     single { SessionManager() }
 
 
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get<AuthRepository>(), get<UserRepository>(), get<SessionManager>()) }
     viewModel { UserViewModel(get<UserRepository>()) }
     viewModel { CategoryViewModel(get<CategoryRepository>()) }
     viewModel { ProductViewModel(get<ProductRepository>(), get<FirebaseStorage>()) }

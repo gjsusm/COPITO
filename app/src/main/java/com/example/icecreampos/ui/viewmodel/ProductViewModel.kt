@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 
 // Using the fully qualified name for the annotation to avoid ambiguity.
 @kotlinx.coroutines.ExperimentalCoroutinesApi
-class ProductViewModel : ViewModel() {
-
-    private val productRepository = ProductRepository()
-    private val categoryRepository = CategoryRepository()
+class ProductViewModel(
+    private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository
+) : ViewModel() {
 
     val categories: StateFlow<List<Category>> = categoryRepository.getCategoriesStream()
         .stateIn(

@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class CategoryViewModel : ViewModel() {
-
-    private val repository = CategoryRepository()
+class CategoryViewModel(private val repository: CategoryRepository) : ViewModel() {
 
     val categories: StateFlow<List<Category>> = repository.getCategoriesStream()
         .stateIn(

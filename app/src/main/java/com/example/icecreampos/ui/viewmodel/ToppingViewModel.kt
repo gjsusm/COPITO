@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ToppingViewModel : ViewModel() {
-
-    private val repository = ToppingRepository()
+class ToppingViewModel(private val repository: ToppingRepository) : ViewModel() {
 
     val toppings: StateFlow<List<Topping>> = repository.getToppingsStream()
         .stateIn(

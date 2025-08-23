@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.icecreampos.ui.navigation.Screen
 import com.example.icecreampos.ui.screens.*
 import com.example.icecreampos.ui.theme.IceCreamPOSTheme
-import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,13 +46,6 @@ fun AppNavigator() {
         }
         composable(Screen.ManageUsers.route) {
             UserManagementScreen(navController = navController)
-        }
-        composable(Screen.Payment.route) { backStackEntry ->
-            val total = backStackEntry.arguments?.getString("totalAmount")?.toFloat() ?: 0.0f
-            PaymentScreen(
-                navController = navController,
-                totalAmount = total
-            )
         }
         composable(Screen.Settings.route) {
             SettingsScreen(navController = navController)

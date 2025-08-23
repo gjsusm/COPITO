@@ -10,7 +10,6 @@ import com.example.icecreampos.data.repository.ProductRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-// Using the fully qualified name for the annotation to avoid ambiguity.
 @kotlinx.coroutines.ExperimentalCoroutinesApi
 class ProductViewModel(
     private val productRepository: ProductRepository,

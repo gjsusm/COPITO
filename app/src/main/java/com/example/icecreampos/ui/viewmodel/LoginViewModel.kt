@@ -10,12 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-import com.example.icecreampos.data.SessionManager
-
 class LoginViewModel(
     private val auth: FirebaseAuth,
-    private val userRepository: UserRepository,
-    private val sessionManager: SessionManager
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _email = MutableStateFlow("")
     val email = _email.asStateFlow()
@@ -47,7 +44,6 @@ class LoginViewModel(
                 if (firebaseUser != null) {
                     val user = userRepository.getUser(firebaseUser.uid)
                     if (user != null) {
-                        sessionManager.currentUser = user
                         _loginState.value = LoginState.Success(user)
                     } else {
                         _loginState.value = LoginState.Error("User data not found in Firestore.")

@@ -23,9 +23,9 @@ import com.example.icecreampos.ui.viewmodel.ToppingViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ToppingManagementScreen(
-    navController: NavController
+    navController: NavController,
+    toppingViewModel: ToppingViewModel = viewModel()
 ) {
-    val toppingViewModel: ToppingViewModel = viewModel()
     val toppings by toppingViewModel.toppings.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
     var toppingToEdit by remember { mutableStateOf<Topping?>(null) }
